@@ -113,6 +113,7 @@ export function MarineMap({ dossier, t, activePfzId, onSelectPfz }: Props) {
           {layers.zones &&
             dossier.restricted.map((z) => {
               const poly = z.polygon.map(project);
+              const anchor = poly[0] ?? { x: 0, y: 0 };
               return (
                 <g key={z.id}>
                   <polygon
@@ -127,7 +128,7 @@ export function MarineMap({ dossier, t, activePfzId, onSelectPfz }: Props) {
                     }
                     onMouseLeave={() => setHover(null)}
                   />
-                  <text x={poly[0].x + 4} y={poly[0].y - 6} fontSize="10" fill="var(--color-foreground)" opacity="0.85">
+                  <text x={anchor.x + 4} y={anchor.y - 6} fontSize="10" fill="var(--color-foreground)" opacity="0.85">
                     {z.name}
                   </text>
                 </g>

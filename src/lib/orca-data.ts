@@ -171,15 +171,16 @@ const round = (n: number, d = 1) => Number(n.toFixed(d));
 
 function offshore(p: MarinePort, nm: number, bearingDeg: number): LatLng {
   const rad = (bearingDeg * Math.PI) / 180;
+  const o = p.position;
   const dLat = (nm / 60) * Math.cos(rad);
-  const dLng = (nm / 60) * Math.sin(rad) / Math.cos((p.lat * Math.PI) / 180);
-  return { lat: round(p.lat + dLat, 3), lng: round(p.lng + dLng, 3) };
+  const dLng = ((nm / 60) * Math.sin(rad)) / Math.cos((o.lat * Math.PI) / 180);
+  return { lat: round(o.lat + dLat, 3), lng: round(o.lng + dLng, 3) };
 }
 
 const BEARING_LABEL = (coast: "east" | "west") => (coast === "east" ? "ENE" : "WSW");
 
 export function buildDossier(portId: string): PortDossier {
-  const port = PORTS.find((p) => p.id === portId) ?? PORTS[0];
+  const port = (PORTS.find((p) => p.id === portId) ?? PORTS[0])!;
   const rnd = seeded(port.id);
   const seaward = port.coast === "east" ? 75 : 255;
 
@@ -203,7 +204,7 @@ export function buildDossier(portId: string): PortDossier {
     rainChance: Math.round(10 + rnd() * 75),
     lightningRisk,
     cycloneWatch,
-    cycloneName: cycloneWatch ? "Depression BOB-04" : undefined,
+    ...(cycloneWatch ? { cycloneName: "Depression BOB-04" } : {}),
     updatedAt: new Date().toISOString(),
   };
 
@@ -222,7 +223,7 @@ export function buildDossier(portId: string): PortDossier {
         ["Indian mackerel", "Sardine"],
         ["Yellowfin tuna", "Barracuda"],
         ["Seer fish", "Ribbonfish"],
-      ][i],
+      ][i] as string[],
       sst: round(conditions.sst + (i - 1) * 0.6),
       chlorophyll: round(conditions.chlorophyll + 0.25 * (2 - i), 2),
       frontStrength: i === 0 ? "strong" : i === 1 ? "moderate" : "weak",
@@ -330,7 +331,7 @@ export function buildDossier(portId: string): PortDossier {
     rainChance: Math.min(95, Math.max(5, Math.round(conditions.rainChance + Math.sin(i) * 20))),
   }));
 
-  const target = pfz[0];
+  const target = pfz[0]!;
   const route: RouteWaypoint[] = [
     { ...port.position, label: `${port.name} harbour`, note: "Departure — slack water recommended" },
     { ...offshore(port, 8, seaward - 10), label: "WP1", note: "Clear of surf zone / fairway buoy" },
@@ -402,7 +403,7 @@ export type AgentId = (typeof AGENTS)[number]["id"];
 
 /** Deterministic agent findings, used for the visible workflow and as AI evidence. */
 export function agentFindings(d: PortDossier): Record<AgentId, string[]> {
-  const best = d.pfz[0];
+  const best = d.pfz[0]!;
   return {
     planner: [
       `Query scoped to ${d.port.name} (${d.port.state}) — ${d.port.coast} coast`,
@@ -427,11 +428,11 @@ export function agentFindings(d: PortDossier): Record<AgentId, string[]> {
     ],
     gis: [
       `${d.restricted.length} restricted features nearby: ${d.restricted.map((r) => r.name).join("; ")}`,
-      `Nearest boundary risk: ${d.restricted[0].name}`,
+      `Nearest boundary risk: ${d.restricted[0]!.name}`,
     ],
     risk: [`Fused risk score ${d.risk.score}/100 → ${d.risk.level.toUpperCase()}`, ...d.risk.drivers],
     route: [
-      `${d.route.length}-waypoint track, ~${d.pfz[0].distanceNm + 6} nm total`,
+      `${d.route.length}-waypoint track, ~${d.pfz[0]!.distanceNm + 6} nm total`,
       "Avoids lightning cells, shipping corridor crossed at 90°, 6 nm buffer from IMBL",
     ],
   };
