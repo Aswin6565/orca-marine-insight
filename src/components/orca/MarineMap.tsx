@@ -5,8 +5,8 @@ import { cn } from "@/lib/utils";
 interface Props {
   dossier: PortDossier;
   t: (k: string) => string;
-  activePfzId?: string;
-  onSelectPfz?: (id: string) => void;
+  activePfzId?: string | undefined;
+  onSelectPfz?: ((id: string) => void) | undefined;
 }
 
 const W = 760;

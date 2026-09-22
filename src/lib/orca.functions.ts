@@ -32,7 +32,7 @@ export type OrcaAnswer = z.infer<typeof AnswerSchema> & {
 function fallback(portId: string): OrcaAnswer {
   const d = buildDossier(portId);
   const f = agentFindings(d);
-  const best = d.pfz[0];
+  const best = d.pfz[0]!;
   return {
     answer:
       `ORCA fused ISRO ocean-colour, INCOIS ocean-state and IMD weather layers for ${d.port.name}. ` +

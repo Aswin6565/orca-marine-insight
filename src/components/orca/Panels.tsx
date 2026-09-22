@@ -63,7 +63,7 @@ export function PfzPanel({
 }: {
   dossier: PortDossier;
   t: (k: string) => string;
-  activeId?: string;
+  activeId?: string | undefined;
   onSelect: (id: string) => void;
 }) {
   return (
@@ -158,7 +158,7 @@ export function EvidencePanel({
 }: {
   dossier: PortDossier;
   t: (k: string) => string;
-  evidence?: string[];
+  evidence?: string[] | undefined;
 }) {
   return (
     <div className="panel p-4">
@@ -205,7 +205,7 @@ export function AgentPipeline({
   t: (k: string) => string;
   status: AgentStatus;
   activeAgent: number;
-  log?: { agent: string; name: string; findings: string[] }[];
+  log?: { agent: string; name: string; findings: string[] }[] | undefined;
 }) {
   return (
     <div className="panel p-4">
