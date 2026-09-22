@@ -323,7 +323,7 @@ export function buildDossier(portId: string): PortDossier {
   }));
 
   const forecast: ForecastPoint[] = Array.from({ length: 7 }, (_, i) => ({
-    day: ["Today", "D+1", "D+2", "D+3", "D+4", "D+5", "D+6"][i],
+    day: (["Today", "D+1", "D+2", "D+3", "D+4", "D+5", "D+6"] as const)[i] ?? `D+${i}`,
     sst: round(conditions.sst + Math.sin(i / 2) * 0.7),
     waveHeight: round(Math.max(0.5, waveHeight + Math.sin(i / 1.6) * 0.9)),
     windSpeed: round(Math.max(5, windSpeed + Math.cos(i / 1.8) * 6)),

@@ -40,7 +40,7 @@ export const Route = createFileRoute("/")({
 });
 
 function Dashboard() {
-  const [portId, setPortId] = useState(PORTS[0].id);
+  const [portId, setPortId] = useState(PORTS[0]!.id);
   const [lang, setLang] = useState<LangCode>("en");
   const [answer, setAnswer] = useState<OrcaAnswer | null>(null);
   const [agentStep, setAgentStep] = useState(0);
