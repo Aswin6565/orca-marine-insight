@@ -152,7 +152,7 @@ export function MarineMap({ dossier, t, activePfzId, onSelectPfz }: Props) {
                   />
                   <circle cx={c.x} cy={c.y} r="5" fill={severityFill(h.severity)} />
                   <text
-                    x={c.x + 9}
+                    x={Math.min(c.x + 9, W - 230)}
                     y={c.y + 4}
                     fontSize="11"
                     fill="var(--color-foreground)"
@@ -198,9 +198,10 @@ export function MarineMap({ dossier, t, activePfzId, onSelectPfz }: Props) {
 
           {/* PFZ */}
           {layers.pfz &&
-            dossier.pfz.map((z) => {
+            dossier.pfz.map((z, i) => {
               const c = project(z.center);
               const active = z.id === activePfzId;
+              const labelDy = [-26, 30, -46][i] ?? -26;
               return (
                 <g key={z.id} onClick={() => onSelectPfz?.(z.id)} className="cursor-pointer">
                   <circle
@@ -215,7 +216,12 @@ export function MarineMap({ dossier, t, activePfzId, onSelectPfz }: Props) {
                   <text x={c.x - 7} y={c.y + 5} fontSize="14">
                     🎣
                   </text>
-                  <text x={c.x + 14} y={c.y - 14} fontSize="10.5" fill="var(--color-foreground)">
+                  <text
+                    x={Math.min(c.x + 16, W - 190)}
+                    y={c.y + labelDy}
+                    fontSize="10.5"
+                    fill="var(--color-foreground)"
+                  >
                     {z.name.split(" — ")[0]} · {z.distanceNm} nm · {(z.confidence * 100).toFixed(0)}%
                   </text>
                 </g>
