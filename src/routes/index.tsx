@@ -13,6 +13,7 @@ import {
   type AgentStatus,
 } from "@/components/orca/Panels";
 import { OrcaChat } from "@/components/orca/OrcaChat";
+import { SystemArchitecture } from "@/components/orca/SystemArchitecture";
 import { PORTS, buildDossier } from "@/lib/orca-data";
 import type { OrcaAnswer } from "@/lib/orca.functions";
 import { LANGUAGES, makeT, languageName, type LangCode } from "@/lib/orca-i18n";
@@ -20,13 +21,13 @@ import { LANGUAGES, makeT, languageName, type LangCode } from "@/lib/orca-i18n";
 export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
-      { title: "Poseidon Atlas · ORCA — Marine Ecosystem Reasoning with Collaborative Agents" },
+      { title: "Poseidon Atlas • ORCA" },
       {
         name: "description",
         content:
           "ORCA fuses ISRO, INCOIS and IMD style marine data through collaborative AI agents to deliver potential fishing zones, cyclone and wave alerts, safe routes and explainable risk advice for Indian fishers.",
       },
-      { property: "og:title", content: "Poseidon Atlas · ORCA marine advisory" },
+      { property: "og:title", content: "Poseidon Atlas • ORCA" },
       {
         property: "og:description",
         content:
@@ -160,6 +161,8 @@ function Dashboard() {
           <EvidencePanel dossier={dossier} t={t} evidence={answer?.evidence} />
         </div>
       </div>
+
+      <SystemArchitecture />
 
       <footer className="mono-num mt-6 pb-6 text-center text-[11px] text-muted-foreground">
         User Query → AI Planning → Multi-Agent Execution → Data Correlation → Risk Analysis → Recommendation → Map +
